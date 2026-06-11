@@ -3,7 +3,7 @@ package cop2805;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class assig2{
+public class assigarraylis{
 
     public static void main(String[] args) {
      
