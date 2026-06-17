@@ -1,0 +1,208 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+/*
+ * Library Management System
+ * SDLC Part 2 Assignment
+ *
+ * Features:
+ * - Load user data from a text file
+ * - Display all users
+ * - Add a new user
+ * - Remove a user
+ * - No duplicate IDs
+ * - Require IDs to be 7 digits
+ */
+
+public class LMS {
+
+    // Stores all user records
+    static ArrayList<String> users = new ArrayList<>();
+
+    /*
+     * Loads user data from a text file.
+     * Each line should be:
+     * ID,Name,Address,Fine
+     */
+    public static void loadData(String fileName) {
+
+        try {
+
+            File file = new File(fileName);
+            Scanner fileScanner = new Scanner(file);
+
+            while (fileScanner.hasNextLine()) {
+                users.add(fileScanner.nextLine());
+            }
+
+            fileScanner.close();
+
+            System.out.println("\nData loaded successfully.");
+
+        } catch (FileNotFoundException e) {
+
+            System.out.println("\nError: File not found.");
+        }
+    }
+
+    /*
+     * Displays all users currently stored.
+     */
+    public static void printUsers() {
+
+        System.out.println("\n===== USER LIST =====");
+
+        if (users.isEmpty()) {
+            System.out.println("No user found.");
+            return;
+        }
+
+        for (String user : users) {
+            System.out.println(user);
+        }
+    }
+
+    /*
+     * Checks if an ID already exists.
+     */
+    public static boolean duplicateID(String id) {
+
+        for (String users : users) {
+
+            String[] data = users.split(",");
+
+            if (data[0].equals(id)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /*
+     * Adds a new patron.
+     */
+    public static void addUser(Scanner input) {
+
+        System.out.print("Enter 7-digit ID: ");
+        String id = input.nextLine();
+
+        if (id.length() != 7) {
+            System.out.println("Error: ID must be exactly 7 digits.");
+            return;
+        }
+
+        if (duplicateID(id)) {
+            System.out.println("Error: Duplicate ID not allowed.");
+            return;
+        }
+
+        System.out.print("Enter Name: ");
+        String name = input.nextLine();
+
+        System.out.print("Enter Address: ");
+        String address = input.nextLine();
+
+        System.out.print("Enter Fine Amount: ");
+        String fine = input.nextLine();
+
+        users.add(id + "," + name + "," + address + "," + fine);
+
+        System.out.println("\nUser added successfully.");
+
+        printUsers();
+    }
+
+    /*
+     * Removes a patron using the ID.
+     */
+    public static void removeUser(Scanner input) {
+
+        System.out.print("Enter User ID to remove: ");
+        String id = input.nextLine();
+
+        for (int i = 0; i < users.size(); i++) {
+
+            String[] data = users.get(i).split(",");
+
+            if (data[0].equals(id)) {
+
+                users.remove(i);
+
+                System.out.println("\nUser removed successfully.");
+
+                printUsers();
+                return;
+            }
+        }
+
+        System.out.println("User not found.");
+    }
+
+    /*
+     * Main program execution.
+     */
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+
+        // TEST 1 - Read Data
+        System.out.print("Enter text file location: ");
+        String fileName = input.nextLine();
+
+        loadData(fileName);
+
+        // TEST 2 - Display
+        printUsers();
+
+        int choice;
+
+        do {
+
+            // TEST 3 - Display Menu
+            System.out.println("\n===== LIBRARY MENU =====");
+            System.out.println("1. Add User");
+            System.out.println("2. Remove User");
+            System.out.println("3. Print All Users");
+            System.out.println("4. Exit");
+
+            System.out.print("Select an option: ");
+
+            while (!input.hasNextInt()) {
+                System.out.println("Please enter a number.");
+                input.next();
+            }
+
+            choice = input.nextInt();
+            input.nextLine();
+
+            switch (choice) {
+
+                // TEST 4 - Create Data
+                case 1:
+                    addUser(input);
+                    break;
+
+                // TEST 5 - Remove Data
+                case 2:
+                    removeUser(input);
+                    break;
+
+                case 3:
+                    printUsers();
+                    break;
+
+                case 4:
+                    System.out.println("\nProgram terminated.");
+                    break;
+
+                default:
+                    System.out.println("Invalid option.");
+            }
+
+        } while (choice != 4);
+
+        input.close();
+    }
