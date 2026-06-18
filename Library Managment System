@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 /*
  * Library Management System
- * SDLC Part 2 Assignment
  *
  * Features:
  * - Load user data from a text file
