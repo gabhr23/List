@@ -82,7 +82,7 @@ public class LMS {
     }
 
     /*
-     * Adds a new patron.
+     * Adds a new user.
      */
     public static void addUser(Scanner input) {
 
